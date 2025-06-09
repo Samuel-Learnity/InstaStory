@@ -10,6 +10,7 @@ import SwiftData
 
 extension UsersStoryView {
     final class ViewModel: ObservableObject {
+        @Published var displayUsers: [UserModel] = []
         @Published var users: [UserModel] = []
         @Published var isLoading: Bool = false
         
@@ -22,14 +23,15 @@ extension UsersStoryView {
             
             isLoading = true
             fetchAndStoreUsers()
-            
         }
     }
 }
 
 extension UsersStoryView.ViewModel {
     func getUserList() {
-        self.users = loadStoredUsers()
+        let stored = loadStoredUsers()
+        self.users = stored
+        self.displayUsers = stored
         
         /// Simulate a loading for presentation
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -37,12 +39,16 @@ extension UsersStoryView.ViewModel {
         }
     }
     
+    func appendBatch() {
+        displayUsers.append(contentsOf: users)
+    }
+    
     func sortUsersByName(for users: [UserModel]) -> [UserModel] {
         return users.sorted { lhs, rhs in
             if lhs.allStoriesSeen != rhs.allStoriesSeen {
                 return !lhs.allStoriesSeen && rhs.allStoriesSeen
             }
-            return lhs.name < rhs.name
+            return lhs.id < rhs.id
         }
     }
     

@@ -115,11 +115,10 @@ extension StoriesViewModel {
         do {
             let fetched = try modelContext.fetch(descriptor)
             users = fetched.sorted { lhs, rhs in
-                // first, users with unseen stories
                 if lhs.allStoriesSeen != rhs.allStoriesSeen {
                     return !lhs.allStoriesSeen && rhs.allStoriesSeen
                 }
-                return lhs.name < rhs.name
+                return lhs.id < rhs.id
             }
             let newtUserIndex = uIndex + 1
             
