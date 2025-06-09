@@ -33,7 +33,7 @@ struct StoriesDetailView: View {
                                 HeaderOverlay()
                             }
                         case .failure:
-                            Color.red
+                            ProgressView()
                         @unknown default:
                             EmptyView()
                         }

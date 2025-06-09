@@ -26,7 +26,13 @@ struct UsersStoryView: View {
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)
-            
+            .refreshable {
+                viewModel.isLoading = true
+                viewModel.getUserList()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.viewModel.isLoading = false
+                }
+            }
         }
         .navigationTitle("Insta Story")
         .toolbar(.hidden)
@@ -78,13 +84,15 @@ struct UsersStoryView: View {
                                     .yellow,
                                     .orange,
                                     .pink,
-                                    .purple
+                                    .purple,
+                                    .yellow
                                 ]),
                             center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/
                         )
                     ),
                     lineWidth: 4
                 )
+                .animation(.easeOut(duration: 0.4), value: viewModel.isLoading)
             }
             .frame(width: 64, height: 64)
         }

@@ -10,7 +10,6 @@ import SwiftData
 
 final class StoriesViewModel: ObservableObject {
     @Published var stories: [StoryModel] = []
-    @Published var isLoading: Bool = false
     @Published var isShowingStories: Bool = false
     
     @Published var selectedUser: UserModel? = nil
@@ -26,7 +25,7 @@ final class StoriesViewModel: ObservableObject {
         self.repository = UserRepository()
         self.modelContext = context
         
-        
+        loadStoredStories()
     }
 }
 

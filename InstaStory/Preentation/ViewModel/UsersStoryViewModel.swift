@@ -39,6 +39,9 @@ extension UsersStoryView.ViewModel {
     
     func sortUsersByName(for users: [UserModel]) -> [UserModel] {
         return users.sorted { lhs, rhs in
+            if lhs.allStoriesSeen != rhs.allStoriesSeen {
+                return !lhs.allStoriesSeen && rhs.allStoriesSeen
+            }
             return lhs.name < rhs.name
         }
     }
@@ -76,7 +79,6 @@ extension UsersStoryView.ViewModel {
         } catch {
             print("Cannot save context \(error)")
         }
-        // Refresh user list
         getUserList()
     }
 }
