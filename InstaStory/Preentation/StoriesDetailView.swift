@@ -27,6 +27,11 @@ struct StoriesDetailView: View {
                             img
                                 .resizable()
                                 .frame(maxWidth: proxy.size.width)
+                            
+                            // MARK: - Header overlay
+                            .overlay(alignment: .top) {
+                                HeaderOverlay()
+                            }
                         case .failure:
                             Color.red
                         @unknown default:
@@ -38,10 +43,48 @@ struct StoriesDetailView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onTapGesture {
-                viewModel.handleCloseStories()
+                
             }
-        }.onAppear(perform: {
-            print("Story detail appear")
-        })
+            
+            
+        }
+    }
+    
+    @ViewBuilder
+    private func HeaderOverlay() -> some View {
+        HStack(spacing: 0) {
+            AsyncImage(url: user.profilePictureURL) { img in
+                img
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .clipShape(Circle())
+            } placeholder: {
+                ProgressView()
+            }
+            .padding(.trailing, 8)
+            
+            Text(user.name)
+                .font(.headline)
+                .bold()
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Button { viewModel.handleCloseStories() }
+            label : {
+                ZStack {
+                    Color.white.opacity(0.0001)
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                        .foregroundColor(.white)
+                }
+                .frame(width: 28, height: 28)
+            }
+        }.frame(alignment: .top)
+            .safeAreaPadding(.all)
+            .padding(.top, 16)
     }
 }
