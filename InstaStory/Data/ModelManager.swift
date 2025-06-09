@@ -10,8 +10,7 @@ import SwiftUI
 
 final class ModelManager {
     let schema = Schema([
-        UserModel.self,
-        StoryModel.self
+        UserModel.self
     ])
     
     var configuration: ModelConfiguration {

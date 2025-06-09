@@ -20,3 +20,4 @@ struct InstaStoryApp: App {
         .modelContainer(modelManager.container) /// Basic usage of container by SwiftData, to be use directly in Views (not our use case)
     }
 }
+ 
