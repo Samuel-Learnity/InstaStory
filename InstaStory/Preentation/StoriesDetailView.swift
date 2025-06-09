@@ -28,14 +28,6 @@ struct StoriesDetailView: View {
                                 .resizable()
                                 .frame(maxWidth: proxy.size.width)
                             
-                            // MARK: - Header overlay
-                                .overlay(alignment: .top) {
-                                    HeaderOverlay()
-                                }
-                            // MARK: - Like overlay
-                                .overlay(alignment: .bottomTrailing) {
-                                    LikeOverlay()
-                                }
                         case .failure:
                             ProgressView()
                         @unknown default:
@@ -49,6 +41,14 @@ struct StoriesDetailView: View {
             .onTapGesture {
                 viewModel.handleUpdateCurrentStory()
             }
+            // MARK: - Header overlay
+                .overlay(alignment: .top) {
+                    HeaderOverlay()
+                }
+            // MARK: - Like overlay
+                .overlay(alignment: .bottomTrailing) {
+                    LikeOverlay()
+                }
         }
     }
     
