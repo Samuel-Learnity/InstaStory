@@ -43,10 +43,8 @@ struct StoriesDetailView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onTapGesture {
-                
+                viewModel.handleUpdateCurrentStory()
             }
-            
-            
         }
     }
     

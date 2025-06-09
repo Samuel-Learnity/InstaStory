@@ -81,4 +81,62 @@ extension StoriesViewModel {
         currentStory = nil
         storyIndex = nil
     }
+    
+    func handleUpdateCurrentStory() {
+        guard let user = selectedUser, let uIndex = userIndex, let sIndex = storyIndex else {
+            return
+        }
+        
+        // if user have more other stories
+        let userStories = user.stories
+        if sIndex + 1 < userStories.count {
+            let nextIndex = sIndex + 1
+            currentStory = userStories[nextIndex]
+            storyIndex = nextIndex
+            
+            if let currentStory, !currentStory.seen {
+                saveStorySeen(for: currentStory)
+            }
+            return
+        }
+        
+        // if user don't have other story -> go to next user
+        let descriptor = FetchDescriptor<UserModel>(sortBy: [SortDescriptor(\.id)])
+        var users: [UserModel] = []
+        do {
+            let fetched = try modelContext.fetch(descriptor)
+            users = fetched.sorted { lhs, rhs in
+                // first, users with unseen stories
+                if lhs.allStoriesSeen != rhs.allStoriesSeen {
+                    return !lhs.allStoriesSeen && rhs.allStoriesSeen
+                }
+                return lhs.name < rhs.name
+            }
+            let newtUserIndex = uIndex + 1
+            
+            if newtUserIndex < users.count {
+                let nextUser = users[newtUserIndex]
+                selectedUser = nextUser
+                userIndex = newtUserIndex
+                
+                let nextStories = nextUser.stories
+                if let firstUnseenIndex = nextStories.firstIndex(where: { !$0.seen }) {
+                    storyIndex = firstUnseenIndex
+                    currentStory = nextStories[firstUnseenIndex]
+                } else {
+                    storyIndex = 0
+                    currentStory = nextStories.first
+                }
+                
+                if let currentStory, !currentStory.seen {
+                    saveStorySeen(for: currentStory)
+                }
+            } else {
+                handleCloseStories()
+            }
+            
+        } catch {
+            print("\(error)")
+        }
+    }
 }

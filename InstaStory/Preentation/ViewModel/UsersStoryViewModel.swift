@@ -44,7 +44,7 @@ extension UsersStoryView.ViewModel {
     }
     
     func loadStoredUsers() -> [UserModel] {
-        let descriptor = FetchDescriptor<UserModel>(sortBy: [SortDescriptor(\.name)])
+        let descriptor = FetchDescriptor<UserModel>(sortBy: [SortDescriptor(\.id)])
         
         do {
             let fetched = try modelContext.fetch(descriptor)
