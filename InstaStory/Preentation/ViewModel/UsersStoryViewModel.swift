@@ -1,0 +1,81 @@
+//
+//  UsersStoryViewModel.swift
+//  InstaStory
+//
+//  Created by Samuel Neveu on 09/06/2025.
+//
+
+import SwiftUI
+import SwiftData
+
+extension UsersStoryView {
+    final class ViewModel: ObservableObject {
+        @Published var users: [UserModel] = []
+        @Published var isLoading: Bool = false
+        
+        private let repository: UserRepositoryProtocol
+        private let modelContext: ModelContext
+        
+        init(modelContext: ModelContext) {
+            self.repository = UserRepository() /// The Repository can be shared, but not in our useCase
+            self.modelContext = modelContext
+            
+            isLoading = true
+            fetchAndStoreUsers()
+            
+            /// Simulate a loading for presentation
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.isLoading = false
+            }
+        }
+    }
+}
+
+extension UsersStoryView.ViewModel {
+    func getUserList() {
+        self.users = loadStoredUsers()
+    }
+    
+    func sortUsersByName(for users: [UserModel]) -> [UserModel] {
+        return users.sorted { lhs, rhs in
+            return lhs.name < rhs.name
+        }
+    }
+    
+    func loadStoredUsers() -> [UserModel] {
+        let descriptor = FetchDescriptor<UserModel>(sortBy: [SortDescriptor(\.name)])
+        
+        do {
+            let fetched = try modelContext.fetch(descriptor)
+            return sortUsersByName(for: fetched)
+        } catch {
+            return []
+        }
+    }
+    
+    func fetchAndStoreUsers() {
+        let fetchedUsers = repository.fetchUsersData()
+        
+        let storedUsers = loadStoredUsers()
+        
+        let existingUsersIDs: Set<String> = Set(storedUsers.map { $0.id })
+        
+        for newUser in fetchedUsers {
+            if !existingUsersIDs.contains(newUser.id) {
+                modelContext.insert(newUser)
+            } else {
+                // TODO: Samuel - Update existing user with his new data
+            }
+        }
+        
+        do {
+            if modelContext.hasChanges {
+                try modelContext.save()
+            }
+        } catch {
+            print("Cannot save context \(error)")
+        }
+        // Refresh user list
+        getUserList()
+    }
+}
