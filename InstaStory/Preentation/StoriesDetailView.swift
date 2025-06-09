@@ -29,9 +29,13 @@ struct StoriesDetailView: View {
                                 .frame(maxWidth: proxy.size.width)
                             
                             // MARK: - Header overlay
-                            .overlay(alignment: .top) {
-                                HeaderOverlay()
-                            }
+                                .overlay(alignment: .top) {
+                                    HeaderOverlay()
+                                }
+                            // MARK: - Like overlay
+                                .overlay(alignment: .bottomTrailing) {
+                                    LikeOverlay()
+                                }
                         case .failure:
                             ProgressView()
                         @unknown default:
@@ -84,5 +88,34 @@ struct StoriesDetailView: View {
         }.frame(alignment: .top)
             .safeAreaPadding(.all)
             .padding(.top, 16)
+    }
+    
+    @ViewBuilder
+    private func LikeOverlay() -> some View {
+        let isLiked = (viewModel.currentStory?.liked ?? false)
+        Button {
+            if let currentStory = viewModel.currentStory {
+                viewModel.toggleLike(for: currentStory)
+            }
+        } label: {
+            ZStack {
+                Color.white.opacity(0.0001)
+                Image(systemName: isLiked
+                      ? "heart.fill"
+                      : "heart"
+                )
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+                .foregroundColor(
+                    isLiked
+                    ? .red
+                    : .white
+                )
+            }.frame(width: 36, height: 36)
+        }
+        .safeAreaPadding(.all)
+        .padding(.trailing, 16)
+        .padding(.bottom, 54)
     }
 }

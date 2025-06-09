@@ -57,6 +57,16 @@ extension StoriesViewModel {
             print("no story found \(error)")
         }
     }
+    
+    func toggleLike(for story: StoryModel) {
+        story.liked.toggle()
+        do {
+            try modelContext.save()
+            loadStoredStories()
+        } catch {
+            print("\(error)")
+        }
+    }
 }
 
 extension StoriesViewModel {
