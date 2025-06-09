@@ -16,17 +16,13 @@ extension UsersStoryView {
         private let repository: UserRepositoryProtocol
         private let modelContext: ModelContext
         
-        init(modelContext: ModelContext) {
+        init(context: ModelContext) {
             self.repository = UserRepository() /// The Repository can be shared, but not in our useCase
-            self.modelContext = modelContext
+            self.modelContext = context
             
             isLoading = true
             fetchAndStoreUsers()
             
-            /// Simulate a loading for presentation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.isLoading = false
-            }
         }
     }
 }
@@ -34,6 +30,11 @@ extension UsersStoryView {
 extension UsersStoryView.ViewModel {
     func getUserList() {
         self.users = loadStoredUsers()
+        
+        /// Simulate a loading for presentation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.isLoading = false
+        }
     }
     
     func sortUsersByName(for users: [UserModel]) -> [UserModel] {

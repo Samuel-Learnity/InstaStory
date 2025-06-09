@@ -11,9 +11,11 @@ import SwiftData
 struct UsersStoryView: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel: UsersStoryView.ViewModel
+    @StateObject private var storiesViewModel: StoriesViewModel
 
     init(modelContext: ModelContext) {
-        _viewModel = StateObject(wrappedValue: .init(modelContext: modelContext))
+        _viewModel = StateObject(wrappedValue: .init(context: modelContext))
+        _storiesViewModel = StateObject(wrappedValue: .init(context: modelContext))
     }
     
     var body: some View {
@@ -28,7 +30,15 @@ struct UsersStoryView: View {
         }
         .navigationTitle("Insta Story")
         .toolbar(.hidden)
-        
+        .overlay() {
+            if storiesViewModel.isShowingStories, let selectedUser = storiesViewModel.selectedUser {
+                StoriesDetailView(user: selectedUser)
+                    .environmentObject(storiesViewModel)
+                    .background {
+                        Color.clear
+                    }
+            }
+        }
     }
     
     @ViewBuilder
@@ -44,7 +54,9 @@ struct UsersStoryView: View {
     
     @ViewBuilder
     private func UserStoryView(for user: UserModel) -> some View {
-        Button(action: {}) {
+        let userIndex = viewModel.users.firstIndex(where: { $0.name == user.name }) ?? 0
+        
+        Button(action: { storiesViewModel.handleOpenUserStories(for: user, userIndex: userIndex) }) {
             ZStack {
                 AsyncImage(url: user.profilePictureURL) { img in
                     img
@@ -56,7 +68,23 @@ struct UsersStoryView: View {
                     ProgressView()
                 }
                 
-                Circle().stroke(Color.red, lineWidth: 4)
+                Circle().stroke(
+                    user.allStoriesSeen || viewModel.isLoading
+                    ? AnyShapeStyle(Color.gray)
+                    : AnyShapeStyle(
+                        AngularGradient(
+                            gradient: Gradient(
+                                colors: [
+                                    .yellow,
+                                    .orange,
+                                    .pink,
+                                    .purple
+                                ]),
+                            center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/
+                        )
+                    ),
+                    lineWidth: 4
+                )
             }
             .frame(width: 64, height: 64)
         }

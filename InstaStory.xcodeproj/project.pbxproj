@@ -20,6 +20,8 @@
 		D83FF5E62DF70C0800C87736 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FF5E52DF70C0800C87736 /* UserRepository.swift */; };
 		D83FF5E92DF70D5500C87736 /* Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FF5E82DF70D5500C87736 /* Decodable.swift */; };
 		D83FF5EC2DF7150000C87736 /* UsersStoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FF5EB2DF7150000C87736 /* UsersStoryViewModel.swift */; };
+		D83FF5EE2DF71D3900C87736 /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FF5ED2DF71D3900C87736 /* StoriesViewModel.swift */; };
+		D83FF5F12DF723F000C87736 /* StoriesDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83FF5F02DF723F000C87736 /* StoriesDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		D83FF5E52DF70C0800C87736 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		D83FF5E82DF70D5500C87736 /* Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decodable.swift; sourceTree = "<group>"; };
 		D83FF5EB2DF7150000C87736 /* UsersStoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersStoryViewModel.swift; sourceTree = "<group>"; };
+		D83FF5ED2DF71D3900C87736 /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
+		D83FF5F02DF723F000C87736 /* StoriesDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 			children = (
 				D83FF5EA2DF714E900C87736 /* ViewModel */,
 				D83FF5C42DF7084400C87736 /* ContentView.swift */,
+				D83FF5F02DF723F000C87736 /* StoriesDetailView.swift */,
 			);
 			path = Preentation;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				D83FF5EB2DF7150000C87736 /* UsersStoryViewModel.swift */,
+				D83FF5ED2DF71D3900C87736 /* StoriesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -231,12 +237,14 @@
 			files = (
 				D83FF5C52DF7084400C87736 /* ContentView.swift in Sources */,
 				D83FF5D92DF7099B00C87736 /* ModelManager.swift in Sources */,
+				D83FF5EE2DF71D3900C87736 /* StoriesViewModel.swift in Sources */,
 				D83FF5E62DF70C0800C87736 /* UserRepository.swift in Sources */,
 				D83FF5EC2DF7150000C87736 /* UsersStoryViewModel.swift in Sources */,
 				D83FF5E92DF70D5500C87736 /* Decodable.swift in Sources */,
 				D83FF5DC2DF709D300C87736 /* UserModel.swift in Sources */,
 				D83FF5E22DF70BAC00C87736 /* StoryDTO.swift in Sources */,
 				D83FF5C32DF7084400C87736 /* InstaStoryApp.swift in Sources */,
+				D83FF5F12DF723F000C87736 /* StoriesDetailView.swift in Sources */,
 				D83FF5E42DF70BC400C87736 /* UserDTO.swift in Sources */,
 				D83FF5DE2DF709DF00C87736 /* StoryModel.swift in Sources */,
 			);

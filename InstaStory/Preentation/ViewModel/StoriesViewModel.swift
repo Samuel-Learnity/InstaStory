@@ -1,0 +1,84 @@
+//
+//  StoriesViewModel.swift
+//  InstaStory
+//
+//  Created by Samuel Neveu on 09/06/2025.
+//
+
+import SwiftUI
+import SwiftData
+
+final class StoriesViewModel: ObservableObject {
+    @Published var stories: [StoryModel] = []
+    @Published var isLoading: Bool = false
+    @Published var isShowingStories: Bool = false
+    
+    @Published var selectedUser: UserModel? = nil
+    @Published var userIndex: Int? = nil
+    
+    @Published var currentStory: StoryModel? = nil
+    @Published var storyIndex: Int? = nil
+    
+    private let repository: UserRepositoryProtocol
+    private let modelContext: ModelContext
+    
+    init(context: ModelContext) {
+        self.repository = UserRepository()
+        self.modelContext = context
+        
+        
+    }
+}
+
+extension StoriesViewModel {
+    private func loadStoredStories() {
+        let descriptor = FetchDescriptor<StoryModel>()
+        
+        do {
+            let fetched = try modelContext.fetch(descriptor)
+            self.stories = fetched
+        } catch {
+            self.stories = []
+        }
+    }
+    
+    func saveStorySeen(for story: StoryModel?) {
+        guard let story else {
+            print("no story seen to save")
+            return
+        }
+        do {
+            if let user = selectedUser, let targetStory = user.stories.first(where: { $0.id == story.id }) {
+                targetStory.seen = true
+                
+                try modelContext.save()
+                loadStoredStories()
+            }
+        } catch {
+            print("no story found \(error)")
+        }
+    }
+}
+
+extension StoriesViewModel {
+    func handleOpenUserStories(for user: UserModel, userIndex: Int) {
+        self.isShowingStories = true
+        
+        self.selectedUser = user
+        self.userIndex = userIndex
+        self.storyIndex = user.stories.firstIndex(where: { !$0.seen }) ?? 0
+        self.currentStory = user.stories.first(where: { !$0.seen }) ?? user.stories.first
+        
+        if let currentStory, !currentStory.seen {
+            saveStorySeen(for: currentStory)
+        }
+    }
+    
+    func handleCloseStories() {
+        isShowingStories = false
+        selectedUser = nil
+        userIndex = nil
+        currentStory = nil
+        storyIndex = nil
+    }
+}

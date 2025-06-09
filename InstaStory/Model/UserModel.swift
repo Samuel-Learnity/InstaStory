@@ -14,6 +14,9 @@ final class UserModel {
     let id: String
     let profilePictureURL: URL
     var stories: [StoryModel] = []
+    var allStoriesSeen: Bool {
+        !stories.contains(where: { !$0.seen })
+    }
     
     init(from dto: UserDTO) {
         self.name = dto.name
